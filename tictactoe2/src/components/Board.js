@@ -1,19 +1,20 @@
 import React from 'react'
 import { Row, Col, Container } from 'react-bootstrap'
+import CrossLine from './CrossLine'
 
 const columnClass = 'd-flex flex-column justify-content-center'
-const columnClassEndBottom = 'd-flex flex-column justify-content-center border-2 border-dark border-end border-bottom'
-const columnClassBottom = 'd-flex flex-column justify-content-center border-2 border-dark border-bottom'
-const columnClassEnd = 'd-flex flex-column justify-content-center border-2 border-dark border-end'
+const columnClassEndBottom = 'd-flex flex-column justify-content-center border-2 border-white border-end border-bottom'
+const columnClassBottom = 'd-flex flex-column justify-content-center border-2 border-white border-bottom'
+const columnClassEnd = 'd-flex flex-column justify-content-center border-2 border-white border-end'
 
-const Board = ({handleClick, showModal, boardPlacement}) => {
+const Board = ({handleClick, boardPlacement, winningLine}) => {
   
   return (
-    <Container className="text-center" style={{height: "600px", width: "600px", fontSize: "100px"}}>
+    <Container className="position-relative text-center" style={{height: "600px", width: "600px", fontSize: "100px"}}>
       <Row style={{height: '200px'}}>
         <Col 
-          onClick={()=> handleClick(0)} 
-          className={columnClassEndBottom}
+        onClick={()=> handleClick(0)} 
+        className={columnClassEndBottom}
         >
           {boardPlacement[0]}
         </Col>
@@ -70,6 +71,7 @@ const Board = ({handleClick, showModal, boardPlacement}) => {
           {boardPlacement[8]}
         </Col>
       </Row>
+      <CrossLine winningLine={winningLine}/>
     </Container>
     
   )

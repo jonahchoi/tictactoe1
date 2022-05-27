@@ -12,41 +12,53 @@ const Game = () => {
   const [isCurrentPlayerX, setIsCurrentPlayerX] = useState(true)
   const [xPlacement, setXPlacement] = useState(new Set())
   const [oPlacement, setOPlacement] = useState(new Set())
+  const [winner, setWinner] = useState(null);
+  const [winningLine, setWinningLine] = useState('');
 
   const reset = () => {
     setBoardPlacement(['','','','','','','','','']);
     setIsCurrentPlayerX(true);
     setXPlacement(new Set())
     setOPlacement(new Set())
+    setWinningLine('');
   }
 
   const checkWinner = (set) => {
     if(set.has(0)){
       if(set.has(1) && set.has(2)){
+        setWinningLine('row1');
         return true;
-      }if(set.has(3) && set.has(6)){
+      }
+      if(set.has(3) && set.has(6)){
+        setWinningLine('col1');
         return true;
       }
     }
     if(set.has(4)){
       if(set.has(0) && set.has(8)){
+        setWinningLine('diag1');
         return true;
       }
       if(set.has(2) && set.has(6)){
+        setWinningLine('diag2');
         return true;
       }
       if(set.has(1) && set.has(7)){
+        setWinningLine('col2');
         return true;
       }
       if(set.has(3) && set.has(5)){
+        setWinningLine('row2');
         return true;
       }
     }
     if(set.has(8)){
       if(set.has(2) && set.has(5)){
+        setWinningLine('col3');
         return true;
       }
       if(set.has(6) && set.has(7)){
+        setWinningLine('row3');
         return true;
       }
     }
@@ -55,17 +67,22 @@ const Game = () => {
 
   const handleWin = (player) => {
     switch (player){
-      case 'x': 
+      case 'X': 
         setIsCurrentPlayerX(null);
         setShowModal(true);
+        setWinner('X');        
         break;
-      case 'o':
+      case 'O':
         setIsCurrentPlayerX(null);
         setShowModal(true);
+        setWinner('O');
         break;
-      case 'tie':
+      case 'Tie':
         setIsCurrentPlayerX(null);
         setShowModal(true);
+        setWinner('Tie');
+        break;
+      default:
         break;
     }
     
@@ -77,23 +94,23 @@ const Game = () => {
     }
     if(isCurrentPlayerX == null) return;
     else if(isCurrentPlayerX){ 
-      boardPlacement[index] = 'x'
+      boardPlacement[index] = 'X'
       xPlacement.add(index);
       if(checkWinner(xPlacement)){
-        handleWin('x');
+        handleWin('X');
         return;
       };
     }
     else { 
-      boardPlacement[index] = 'o'
+      boardPlacement[index] = 'O'
       oPlacement.add(index);
       if(checkWinner(oPlacement)){
-        handleWin('o');
+        handleWin('O');
         return;
       };
     }
     if(!boardPlacement.includes('')){
-      handleWin('tie');
+      handleWin('Tie');
       return;
     }
     setIsCurrentPlayerX(!isCurrentPlayerX)
@@ -104,10 +121,10 @@ const Game = () => {
   }
   return (
     <>
-      <Board setShowModal={setShowModal} boardPlacement={boardPlacement} handleClick={handleClick}/>
+      <Board boardPlacement={boardPlacement} handleClick={handleClick} winningLine={winningLine}/>
       <PlayerDisplay isCurrentPlayerX={isCurrentPlayerX}/>
       <Button onClick={reset}>Reset</Button>
-      <GameEndModal showModal={showModal} hideModal={hideModal} reset={reset}/>
+      <GameEndModal showModal={showModal} hideModal={hideModal} reset={reset} winner={winner}/>
     </>
   )
 }
